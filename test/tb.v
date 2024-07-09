@@ -23,8 +23,8 @@ module tb ();
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
 
-  // Replace tt_uart_mvm with your module name:
-  tt_uart_mvm user_project (
+  // Replace tt_um_uart_mvm with your module name:
+  tt_um_uart_mvm user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
