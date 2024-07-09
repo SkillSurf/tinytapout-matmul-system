@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_example (
+module tt_uart_mvm (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -16,12 +16,38 @@ module tt_um_example (
     input  wire       rst_n     // reset_n - low to reset
 );
 
+  localparam 
+    CLOCKS_PER_PULSE = 4                ,  //200_000_000/9600
+    BITS_PER_WORD    = 8                ,
+    PACKET_SIZE_TX   = BITS_PER_WORD + 5,
+    W_Y_OUT          = 16               ,
+    R                = 8                ,
+    C                = 8                ,
+    W_X              = 4                ,
+    W_K              = 4                ;
+
+  mvm_uart_system #(
+    .CLOCKS_PER_PULSE (CLOCKS_PER_PULSE),
+    .BITS_PER_WORD    (BITS_PER_WORD   ),
+    .PACKET_SIZE_TX   (PACKET_SIZE_TX  ),
+    .W_Y_OUT          (W_Y_OUT         ),
+    .R                (R               ), 
+    .C                (C               ), 
+    .W_X              (W_X             ), 
+    .W_K              (W_K             )
+  ) MVM_UART_SYSTEM (
+    .clk (clk), 
+    .rstn(rst_n), 
+    .rx  (ui_in [0]),
+    .tx  (uo_out[0])
+  );
+
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  assign uo_out[7:1] = 0;
   assign uio_out = 0;
   assign uio_oe  = 0;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ui_in[7:1], ena, clk, rst_n, 1'b0};
 
 endmodule

@@ -1,0 +1,19 @@
+name: Verify
+
+on: [push]
+
+jobs:
+  verify-with-icarus:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Icarus
+      run: |
+        sudo apt install -y --no-install-recommends iverilog
+
+    - name: Verify Full System
+      run: |
+        iverilog -g2012 -o compiled src/mvm_uart_system.v src/uart_rx.v src/uart_tx.v src/axis_matvec_mul.v src/matvec_mul.v src/skid_buffer.v test/mvm_uart_system_tb.sv test/simple_axis_tb.sv src/project.v
+        vvp compiled
