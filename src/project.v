@@ -20,7 +20,7 @@ module tt_um_uart_mvm (
     CLOCKS_PER_PULSE = 4                ,  //200_000_000/9600
     BITS_PER_WORD    = 8                ,
     PACKET_SIZE_TX   = BITS_PER_WORD + 5,
-    W_Y_OUT          = 16               ,
+    W_Y_OUT          = 10               ,
     R                = 4                ,
     C                = 4                ,
     W_X              = 4                ,
