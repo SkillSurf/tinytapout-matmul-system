@@ -24,7 +24,7 @@ module tt_um_uart_mvm (
     R                = 4                ,
     C                = 4                ,
     W_X              = 4                ,
-    W_K              = 4                ;
+    W_K              = 2                ;
 
   mvm_uart_system #(
     .CLOCKS_PER_PULSE (CLOCKS_PER_PULSE),
