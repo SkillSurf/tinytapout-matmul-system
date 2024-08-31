@@ -30,12 +30,13 @@ module mvm_uart_system #(
   );
 
   wire [R*W_Y  -1:0] m_data_y;
+  wire s_ready;
   axis_matvec_mul #(
     .R(R), .C(C), .W_X(W_X), .W_K(W_K)
   ) AXIS_MVM (
     .clk    (clk      ), 
     .rstn   (rstn     ),
-    // .s_axis_kx_tready(  ), // assume always valid
+    .s_axis_kx_tready(s_ready), // assume always valid
     .s_axis_kx_tvalid(s_valid  ), 
     .s_axis_kx_tdata (s_data_kx),
     .m_axis_y_tready (m_ready  ),
