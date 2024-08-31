@@ -16,12 +16,12 @@ module skid_buffer #(parameter WIDTH = 8)(
       FULL   : if      ( m_ready)             state_next = PARTIAL;
     endcase
   end
-  always @(posedge clk)
+  always @(posedge clk or negedge rstn)
     if (!rstn) state <= EMPTY;
     else       state <= state_next;
 
   reg [WIDTH-1:0] buffer;
-  always @(posedge clk)
+  always @(posedge clk or negedge rstn)
     if (!rstn) {m_valid, s_ready, buffer, m_data} <= 0;
     else begin
       

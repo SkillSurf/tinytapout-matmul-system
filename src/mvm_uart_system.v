@@ -35,7 +35,7 @@ module mvm_uart_system #(
   ) AXIS_MVM (
     .clk    (clk      ), 
     .rstn   (rstn     ),
-    .s_axis_kx_tready(  ), // assume always valid
+    // .s_axis_kx_tready(  ), // assume always valid
     .s_axis_kx_tvalid(s_valid  ), 
     .s_axis_kx_tdata (s_data_kx),
     .m_axis_y_tready (m_ready  ),

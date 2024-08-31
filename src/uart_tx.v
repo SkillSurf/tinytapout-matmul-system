@@ -60,7 +60,7 @@ module uart_tx #(
                     m_packets <= (m_packets >> 1);
                   end
 
-                end else c_clocks <= W_CCLOCKS'(c_clocks + 1);
+                end else c_clocks <= W_CCLOCKS'(32'(c_clocks) + 1);
       endcase
   end
 
