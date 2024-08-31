@@ -1,7 +1,7 @@
 module mvm_uart_system_tb;
 
   timeunit 1ns/1ps;
-  localparam  R=4, C=4, W_X=4, W_K=2,
+  localparam  R=2, C=2, W_X=4, W_K=2,
               W_Y_OUT          = 8,
               CLOCKS_PER_PULSE = 4, //200_000_000/9600,
               BITS_PER_WORD    = 8,
