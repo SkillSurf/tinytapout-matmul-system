@@ -23,9 +23,9 @@ module axis_matvec_mul #(
     ) MATVEC (  
       .clk(clk    ),
       .cen(i_ready),
-      .k  (k      ),
-      .x  (x      ), 
-      .y  (i_data )
+      .kf (k      ),
+      .xf (x      ), 
+      .yf (i_data )
     );
 
     reg [LATENCY-2:0] shift;

@@ -14,7 +14,7 @@ module mvm_uart_system #(
               W_BUS_Y  = R*W_Y_OUT,
               W_Y      = W_X + W_K + $clog2(C);
 
-  wire s_valid, m_valid, s_ready, m_ready;
+  wire s_valid, m_valid, m_ready;
   wire [W_BUS_KX-1:0] s_data_kx;
 
   uart_rx #(
@@ -35,7 +35,7 @@ module mvm_uart_system #(
   ) AXIS_MVM (
     .clk    (clk      ), 
     .rstn   (rstn     ),
-    .s_axis_kx_tready(s_ready  ), // assume always valid
+    .s_axis_kx_tready(  ), // assume always valid
     .s_axis_kx_tvalid(s_valid  ), 
     .s_axis_kx_tdata (s_data_kx),
     .m_axis_y_tready (m_ready  ),
@@ -49,12 +49,14 @@ module mvm_uart_system #(
   wire [R*W_Y_OUT-1:0] o_flat;
 
   genvar r;
+  generate
   for (r=0; r<R; r=r+1) begin
     assign y_up  [r] = m_data_y[W_Y*(r+1)-1 : W_Y*r];
-    assign o_up  [r] = $signed(y_up[r]); // sign extend to 32b
+    assign o_up  [r] = W_Y_OUT'($signed(y_up[r])); // sign extend to 32b
     assign o_flat[W_Y_OUT*(r+1)-1 : W_Y_OUT*r] = o_up[r];
     // assign o_flat[W_Y_OUT*(r+1)-1 : W_Y_OUT*r] = $signed(m_data_y[W_Y*(r+1)-1 : W_Y*r]);
   end
+  endgenerate
 
   uart_tx #(
    .CLOCKS_PER_PULSE (CLOCKS_PER_PULSE),

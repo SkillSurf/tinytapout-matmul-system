@@ -23,8 +23,11 @@ module uart_tx #(
   assign tx = m_packets[0];
 
   // Counters
-  reg [$clog2(NUM_WORDS*PACKET_SIZE)-1:0] c_pulses;
-  reg [$clog2(CLOCKS_PER_PULSE)     -1:0] c_clocks;
+  localparam W_CPULSES = $clog2(NUM_WORDS*PACKET_SIZE),
+             W_CCLOCKS = $clog2(CLOCKS_PER_PULSE);
+
+  reg [W_CPULSES-1:0] c_pulses;
+  reg [W_CCLOCKS-1:0] c_clocks;
 
   // State Machine
 
@@ -35,7 +38,7 @@ module uart_tx #(
 
     if (!rstn) begin
       state     <= IDLE;
-      m_packets <= '1;
+      m_packets <= -1;
       {c_pulses, c_clocks} <= 0;
     end else
       case (state)
@@ -44,12 +47,12 @@ module uart_tx #(
                   m_packets  <= s_packets;
                 end
 
-        SEND :  if (c_clocks == CLOCKS_PER_PULSE-1) begin
+        SEND :  if (c_clocks == W_CCLOCKS'(CLOCKS_PER_PULSE-1)) begin
                   c_clocks <= 0;
 
-                  if (c_pulses == NUM_WORDS*PACKET_SIZE-1) begin
+                  if (c_pulses == W_CPULSES'(NUM_WORDS*PACKET_SIZE-1)) begin
                     c_pulses  <= 0;
-                    m_packets <= '1;
+                    m_packets <= -1;
                     state     <= IDLE;
 
                   end else begin
@@ -57,7 +60,7 @@ module uart_tx #(
                     m_packets <= (m_packets >> 1);
                   end
 
-                end else c_clocks <= c_clocks + 1;
+                end else c_clocks <= W_CCLOCKS'(c_clocks + 1);
       endcase
   end
 

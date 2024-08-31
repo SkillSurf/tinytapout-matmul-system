@@ -11,9 +11,13 @@ module uart_rx #(
 
   // Counters
 
-  reg [$clog2(CLOCKS_PER_PULSE) -1:0] c_clocks;
-  reg [$clog2(BITS_PER_WORD)    -1:0] c_bits  ;
-  reg [$clog2(NUM_WORDS)        -1:0] c_words ;
+  localparam W_CCLOCKS = $clog2(CLOCKS_PER_PULSE),
+             W_CBITS   = $clog2(BITS_PER_WORD),
+             W_CWORDS  = $clog2(NUM_WORDS);
+
+  reg [W_CCLOCKS-1:0] c_clocks;
+  reg [W_CBITS  -1:0] c_bits  ;
+  reg [W_CWORDS -1:0] c_words ;
 
   // State Machine
 
@@ -34,21 +38,21 @@ module uart_rx #(
         IDLE :  if (rx == 0)                      
                   state <= START;
 
-        START:  if (c_clocks == CLOCKS_PER_PULSE/2-1) begin
+        START:  if (c_clocks == W_CCLOCKS'(CLOCKS_PER_PULSE/2-1)) begin
                   state <= DATA;
                   c_clocks <= 0;
                 end else
                   c_clocks <= c_clocks + 1;
 
-        DATA :  if (c_clocks == CLOCKS_PER_PULSE-1) begin
+        DATA :  if (c_clocks == W_CCLOCKS'(CLOCKS_PER_PULSE-1)) begin
                   c_clocks <= 0;
                   m_data   <= {rx, m_data[W_OUT-1:1]};
 
-                  if (c_bits == BITS_PER_WORD-1) begin
+                  if (c_bits == W_CBITS'(BITS_PER_WORD-1)) begin
                     state  <= END;
                     c_bits <= 0;
 
-                    if (c_words == NUM_WORDS-1) begin
+                    if (c_words == W_CWORDS'(NUM_WORDS-1)) begin
                       m_valid <= 1;
                       c_words <= 0;
 
@@ -56,7 +60,7 @@ module uart_rx #(
                   end else c_bits <= c_bits + 1;
                 end else c_clocks <= c_clocks + 1;
 
-        END  :  if (c_clocks == CLOCKS_PER_PULSE-1) begin
+        END  :  if (c_clocks == W_CCLOCKS'(CLOCKS_PER_PULSE-1)) begin
                   state <= IDLE;
                   c_clocks <= 0;
                 end else
