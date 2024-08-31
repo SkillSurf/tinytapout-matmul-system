@@ -3,7 +3,7 @@ module mvm_uart_system_tb;
   timeunit 1ns/1ps;
   localparam  R=2, C=2, W_X=4, W_K=4,
               W_Y_OUT          = 8,
-              CLOCKS_PER_PULSE = 10,
+              CLOCKS_PER_PULSE = 16,
               BITS_PER_WORD    = 8,
               W_Y              = W_X + W_K + $clog2(C),
               W_BUS_KX         = R*C*W_K + C*W_X,
