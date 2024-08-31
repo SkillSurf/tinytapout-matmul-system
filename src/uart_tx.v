@@ -7,17 +7,25 @@ module uart_tx #(
   localparam  NUM_WORDS   = W_OUT/BITS_PER_WORD
 )(
   input  wire clk, rstn, s_valid, 
-  input  wire [NUM_WORDS-1:0][BITS_PER_WORD-1:0] s_data,
+  input  wire [NUM_WORDS*BITS_PER_WORD-1:0] s_data_f,
   output reg  tx, s_ready
 );  
-  localparam END_BITS = PACKET_SIZE-BITS_PER_WORD-1;
-  reg [NUM_WORDS-1:0][PACKET_SIZE-1:0] s_packets;
-  reg [NUM_WORDS*PACKET_SIZE     -1:0] m_packets;
-
+  
   genvar n;
+  wire [BITS_PER_WORD-1:0] s_data [NUM_WORDS-1:0];
+
   generate
     for (n=0; n<NUM_WORDS; n=n+1)
-      assign s_packets[n] = { ~(END_BITS'(0)), s_data[n], 1'b0};
+      assign s_data[n] = s_data_f[BITS_PER_WORD*(n+1)-1 : BITS_PER_WORD*n];
+  endgenerate
+
+  localparam END_BITS = PACKET_SIZE-BITS_PER_WORD-1;
+  reg [NUM_WORDS*PACKET_SIZE-1:0] s_packets;
+  reg [NUM_WORDS*PACKET_SIZE-1:0] m_packets;
+
+  generate
+    for (n=0; n<NUM_WORDS; n=n+1)
+      assign s_packets[PACKET_SIZE*(n+1)-1:PACKET_SIZE*n] = { ~(END_BITS'(0)), s_data[n], 1'b0};
   endgenerate
     
   assign tx = m_packets[0];

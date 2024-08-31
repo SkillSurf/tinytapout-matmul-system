@@ -70,7 +70,7 @@ module mvm_uart_system #(
    .rstn    (rstn     ), 
    .s_ready (m_ready  ),
    .s_valid (m_valid  ), 
-   .s_data  (o_flat   ),
+   .s_data_f(o_flat   ),
    .tx      (tx       )
   );  
 
