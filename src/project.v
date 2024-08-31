@@ -21,8 +21,8 @@ module tt_um_uart_mvm (
     BITS_PER_WORD    = 8                ,
     PACKET_SIZE_TX   = BITS_PER_WORD + 5,
     W_Y_OUT          = 16               ,
-    R                = 8                ,
-    C                = 8                ,
+    R                = 4                ,
+    C                = 4                ,
     W_X              = 4                ,
     W_K              = 4                ;
 
