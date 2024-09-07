@@ -17,7 +17,7 @@ module tt_um_uart_mvm (
 );
 
   localparam 
-    CLOCKS_PER_PULSE = 33,
+    CLOCKS_PER_PULSE = 50_000_000/19200,
     BITS_PER_WORD    = 8                ,
     PACKET_SIZE_TX   = BITS_PER_WORD + 5,
     W_Y_OUT          = 8                ,
